@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'json'
+gem 'net-http-persistent', '~> 2.9'
+gem 'pg'
+gem 'rake'
+gem 'sequel', '~> 4.36'
