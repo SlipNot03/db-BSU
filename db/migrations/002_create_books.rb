@@ -7,9 +7,10 @@ Sequel.migration do
         String :publisher, null: false
         String :place_of_publication, null: false
         String :year_of_publication, null: false
-        String :isbn, null: false, unique: true
+        String :isbn, null: false, unique: true, unique: true
         String :number_of_pages, null: false
-        String :description, null: false
+        Text :description, null: false
     end
   end
 end
+
