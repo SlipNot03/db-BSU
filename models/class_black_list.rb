@@ -15,11 +15,8 @@ class BlackList < Sequel::Model(:black_lists)
     should_validate_date = new? || changed_columns.include?(:end_punishment)
 
     if should_validate_date && end_punishment && end_punishment < Date.today
-      errors.add(:end_punishment, 'Дата возврата не может быть в прошлом')
-    end
-    
-    if new? && end_punishment && end_punishment < Date.today
       errors.add(:end_punishment, 'Дата окончания наказания не может быть в прошлом')
     end
+    
   end
 end
