@@ -1,11 +1,11 @@
 require 'rake'
 require 'sequel'
-require 'uri'
-require_relative 'config/db_config'
+require 'logger'
+require_relative 'config/Config'
 
 Sequel.extension :migration
 task :connect_db do
-  DB = Sequel.connect(DATABASE_URL)
+  require_relative 'config/database'
   DB.loggers << Logger.new($stdout)
 end
 
@@ -13,8 +13,10 @@ namespace :db do
 
   task :create do
     begin
-      uri = URI.parse(DATABASE_URL)
-      db_name, user, password, host = uri.path.delete_prefix('/'), uri.user, uri.password, uri.host
+      db_name = Config::DB_NAME
+      user = Config::DB_USERNAME
+      password = Config::DB_PASSWORD
+      host = Config::DB_HOST
       admin_db = Sequel.connect(adapter: 'postgres', host: host, user: user, password: password, database: 'postgres')
       admin_db.run("CREATE DATABASE \"#{db_name}\"")
       admin_db&.disconnect
@@ -23,11 +25,10 @@ namespace :db do
 
   task :drop do
     begin
-      uri = URI.parse(DATABASE_URL)
-      db_name  = uri.path.delete_prefix('/')
-      user     = uri.user
-      password = uri.password
-      host     = uri.host
+      db_name = Config::DB_NAME
+      user = Config::DB_USERNAME
+      password = Config::DB_PASSWORD
+      host = Config::DB_HOST
       admin_db = Sequel.connect(adapter: 'postgres', host: host, user: user, password: password, database: 'postgres')
       admin_db["SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = ?", db_name].all
       admin_db.run("DROP DATABASE \"#{db_name}\"")
