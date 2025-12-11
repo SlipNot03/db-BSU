@@ -10,16 +10,12 @@ class Book < Sequel::Model(:books)
                         :year_of_publication, :isbn, :number_of_pages, :description]
         validates_presence required_fields
 
-        #Уникальность ISBN
         validates_unique :isbn, message: 'Книга с таким ISBN уже существует'
 
-        #Проверка длины ISBN
         validates_min_length 13, :isbn, message: 'ISBN слишком короткий'
 
-        #Год издания должен быть числом из 4 цифр
         validates_format /^\d{4}$/, :year_of_publication, message: 'Год издания должен быть из 4 цифр'
         
-        #Количество страниц должно быть числом
         validates_format /^\d+$/, :number_of_pages, message: 'Количество страниц должно быть числом'
     end
 
